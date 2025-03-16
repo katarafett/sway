@@ -1,0 +1,301 @@
+set $mod Mod4
+
+set $left h
+set $down j
+set $up k
+set $right l
+
+set $alt_left Left
+set $alt_down Down
+set $alt_up Up
+set $alt_right Right
+
+set $1 1
+set $2 2
+set $3 3
+set $4 4
+set $5 5
+set $6 6
+set $7 7
+set $8 8
+set $9 9
+set $10 0
+
+set $alt_1 apostrophe
+set $alt_2 comma
+set $alt_3 period
+set $alt_4 p
+set $alt_5 y
+set $alt_6 f
+set $alt_7 g
+set $alt_8 c
+set $alt_9 r
+set $alt_10 s
+
+
+
+# reload the configuration file
+bindsym $mod+Shift+v reload
+# exit sway
+bindsym $mod+Shift+b exec swaymsg exit
+
+bindsym $mod+w mode "resize"
+
+## Apps
+bindsym $mod+e exec tofi-drun \
+			--font /usr/share/fonts/TTF/JetBrainsMonoNerdFont-Regular.ttf \
+			--font-size 14 \
+			--prompt-text " run: " \
+			--width 100% --height 30 \
+			--horizontal true \
+			--hint-font false \
+			--anchor top \
+			--outline-width 0 \
+			--border-width 0 \
+			--min-input-width 200 \
+			--result-spacing 20 \
+			--padding-top 0 \
+			--padding-left 0 \
+			--padding-right 0 \
+			--background-color "#000000" \
+			--selection-color "#723ee4" \
+			--terminal="/usr/bin/alacritty -e" \
+			| xargs swaymsg exec --
+
+bindsym $mod+Shift+minus exec --no-startup-id systemctl poweroff
+bindsym $mod+Shift+u exec --no-startup-id signal-desktop
+bindsym $mod+Shift+a exec --no-startup-id discord
+bindsym $mod+Shift+e exec --no-startup-id alacritty
+bindsym $mod+Shift+o exec --no-startup-id firefox
+
+## Screenshot
+bindsym Ctrl+Print exec --no-startup-id maim "/home/$USER/Pictures/$(date)"
+bindsym Ctrl+$mod+Print exec --no-startup-id maim --window $(xdotool getactivewindow) "/home/$USER/Pictures/$(date)"
+bindsym Ctrl+Shift+Print exec --no-startup-id maim --select "/home/$USER/Pictures/$(date)"
+
+## Clipboard Screenshots
+bindsym Print exec --no-startup-id maim | xclip -selection clipboard -t image/png
+bindsym $mod+Print exec --no-startup-id maim --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
+bindsym Shift+Print exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
+
+## Media
+bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+# Use pactl to adjust volume in PulseAudio.
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+# Change brightness
+bindsym XF86MonBrightnessUp exec brightnessctl -d intel_backlight -e set 5%+
+bindsym XF86MonBrightnessDown exec brightnessctl -d intel_backlight -e set 5%-
+bindsym XF86KbdBrightnessUp exec brightnessctl -d :white:kbd_backlight -e set 10%+
+bindsym XF86KbdBrightnessDown exec brightnessctl -d :white:kbd_backlight -e set 10%-
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# kill focused window
+bindsym $mod+Shift+i kill
+
+# change focus
+# QWERTY j, k, l, ;
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+$alt_left focus left
+bindsym $mod+$alt_down focus down
+bindsym $mod+$alt_up focus up
+bindsym $mod+$alt_right focus right
+
+# move focused window
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+$alt_left move left
+bindsym $mod+Shift+$alt_down move down
+bindsym $mod+Shift+$alt_up move up
+bindsym $mod+Shift+$alt_right move right
+
+# split in horizontal orientation
+bindsym $mod+q split h
+
+# split in vertical orientation
+bindsym $mod+semicolon split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+u fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+t focus parent
+bindsym $mod+n focus child
+bindsym $mod+Shift+semicolon layout stacking
+bindsym $mod+Shift+q layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+bindsym $mod+Shift+z move scratchpad
+bindsym $mod+z scratchpad show
+
+
+
+
+# The combination of xss-lock, nm-applet and pactl is a popular choice, so
+# they are included here as an example. Modify as you see fit.
+
+# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
+# screen before suspend. Use loginctl lock-session to lock your screen.
+exec --no-startup-id swayidle -w \
+		 timeout 300 'swaylock -f -c 000000' \
+         timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+		 timeout 10 'if pgrep swaylock; then swaymsg "output * power off"; fi' resume 'swaymsg "output * power on"' \
+         lock 'swaylock -f -c 000000'
+
+
+# NetworkManager is the most popular way to manage wireless networks on Linux,
+# and nm-applet is a desktop environment-independent system tray GUI for it.
+exec --no-startup-id nm-applet
+
+default_dim_inactive 0.2
+
+
+# focus the parent container
+# bindcode $mod+38 focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 1
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 5
+set $ws6 6
+set $ws7 7
+set $ws8 8
+set $ws9 9
+set $ws10 10
+
+# switch to workspace
+bindsym $mod+$1 workspace number $ws1
+bindsym $mod+$2 workspace number $ws2
+bindsym $mod+$3 workspace number $ws3
+bindsym $mod+$4 workspace number $ws4
+bindsym $mod+$5 workspace number $ws5
+bindsym $mod+$6 workspace number $ws6
+bindsym $mod+$7 workspace number $ws7
+bindsym $mod+$8 workspace number $ws8
+bindsym $mod+$9 workspace number $ws9
+bindsym $mod+$10 workspace number $ws10
+
+bindsym $mod+$alt_1 workspace number $ws1
+bindsym $mod+$alt_2 workspace number $ws2
+bindsym $mod+$alt_3 workspace number $ws3
+bindsym $mod+$alt_4 workspace number $ws4
+bindsym $mod+$alt_5 workspace number $ws5
+bindsym $mod+$alt_6 workspace number $ws6
+bindsym $mod+$alt_7 workspace number $ws7
+bindsym $mod+$alt_8 workspace number $ws8
+bindsym $mod+$alt_9 workspace number $ws9
+bindsym $mod+$alt_10 workspace number $ws10
+
+# move focused container to workspace
+bindsym $mod+Shift+$1 move container to workspace number $ws1
+bindsym $mod+Shift+$2 move container to workspace number $ws2
+bindsym $mod+Shift+$3 move container to workspace number $ws3
+bindsym $mod+Shift+$4 move container to workspace number $ws4
+bindsym $mod+Shift+$5 move container to workspace number $ws5
+bindsym $mod+Shift+$6 move container to workspace number $ws6
+bindsym $mod+Shift+$7 move container to workspace number $ws7
+bindsym $mod+Shift+$8 move container to workspace number $ws8
+bindsym $mod+Shift+$9 move container to workspace number $ws9
+bindsym $mod+Shift+$10 move container to workspace number $ws10
+
+bindsym $mod+Shift+$alt_1 move container to workspace number $ws1
+bindsym $mod+Shift+$alt_2 move container to workspace number $ws2
+bindsym $mod+Shift+$alt_3 move container to workspace number $ws3
+bindsym $mod+Shift+$alt_4 move container to workspace number $ws4
+bindsym $mod+Shift+$alt_5 move container to workspace number $ws5
+bindsym $mod+Shift+$alt_6 move container to workspace number $ws6
+bindsym $mod+Shift+$alt_7 move container to workspace number $ws7
+bindsym $mod+Shift+$alt_8 move container to workspace number $ws8
+bindsym $mod+Shift+$alt_9 move container to workspace number $ws9
+bindsym $mod+Shift+$alt_10 move container to workspace number $ws10
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym $left resize shrink width 10 px or 10 ppt
+        bindsym $down resize grow height 10 px or 10 ppt
+        bindsym $up resize shrink height 10 px or 10 ppt
+        bindsym $right resize grow width 10 px or 10 ppt
+
+        bindsym $alt_left resize shrink width 10 px or 10 ppt
+        bindsym $alt_down resize grow height 10 px or 10 ppt
+        bindsym $alt_up resize shrink height 10 px or 10 ppt
+        bindsym $alt_right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+w mode "default"
+}
+
+bar {
+        status_command i3status
+}
+
+# General conf
+focus_wrapping no
+
+input "type:keyboard" {
+	xkb_options caps:escape
+	repeat_delay 300
+	repeat_rate 20
+}
+
+input "type:touchpad" {
+	natural_scroll disabled
+	tap enabled
+	accel_profile "flat"
+	pointer_accel 0.8
+}
+
+## aesthetics
+default_border pixel 1
+output eDP-1 scale 1
+
+set $prime #403070
+set $accnt #723ee4
+#						border	bg		text	indic   child
+# client.focused		#4c7899 #285577 #ffffff #2e9ef4 #285577
+client.focused 			$prime	$prime	#eeeeee $accnt	$prime
+# client.unfocused		$prime	$prime	#eeeeee $accnt	$prime
+# client.focused_inactive	$prime	$prime	#eeeeee $accnt	$prime
+
+# Launch
+exec swaybg -i /home/main/pictures/haunter.png
+exec brightnessctl -d intel_backlight set 50%
+exec brightnessctl -d :white:kbd_backlight set 0
