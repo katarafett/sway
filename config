@@ -147,10 +147,10 @@ bindsym $mod+z scratchpad show
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id swayidle -w \
-		 timeout 300 'swaylock -f -c 000000' \
+		 timeout 300 'swaylock -f -c 000000 --ring-color 454545 --key-hl-color 723ee4' \
          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
 		 timeout 10 'if pgrep swaylock; then swaymsg "output * power off"; fi' resume 'swaymsg "output * power on"' \
-         lock 'swaylock -f -c 000000'
+         lock 'swaylock -f -c 000000 --ring-color 454545 --key-hl-color 723ee4'
 
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
