@@ -1,4 +1,7 @@
 set $mod Mod4
+set $disp1 DP-3
+set $disp2 HDMI-A-1
+set $disp3 eDP-1
 
 set $left h
 set $down j
@@ -42,44 +45,27 @@ bindsym $mod+Shift+b exec swaymsg exit
 bindsym $mod+w mode "resize"
 
 ## Apps
-bindsym $mod+e exec tofi-drun \
-			--font /usr/share/fonts/TTF/JetBrainsMonoNerdFont-Regular.ttf \
-			--font-size 14 \
-			--prompt-text " run: " \
-			--width 100% --height 30 \
-			--horizontal true \
-			--hint-font false \
-			--anchor top \
-			--outline-width 0 \
-			--border-width 0 \
-			--min-input-width 200 \
-			--result-spacing 20 \
-			--padding-top 0 \
-			--padding-left 0 \
-			--padding-right 0 \
-			--background-color "#000000" \
-			--selection-color "#723ee4" \
-			--terminal="/usr/bin/alacritty -e" \
-			| xargs swaymsg exec --
+bindsym $mod+e exec tofi-drun | xargs swaymsg exec --
 
-bindsym $mod+Shift+minus exec --no-startup-id systemctl poweroff
-bindsym $mod+Shift+u exec --no-startup-id signal-desktop
-bindsym $mod+Shift+a exec --no-startup-id discord
-bindsym $mod+Shift+e exec --no-startup-id alacritty
-bindsym $mod+Shift+o exec --no-startup-id firefox
+bindsym $mod+Shift+minus exec systemctl poweroff
+bindsym $mod+Shift+a exec discord
+bindsym $mod+Shift+e exec alacritty
+bindsym $mod+Shift+o exec firefox
+bindsym $mod+Shift+u exec signal-desktop
+bindsym $mod+Shift+d exec alacritty -e cmus
 
-## Screenshot
-bindsym Ctrl+Print exec --no-startup-id maim "/home/$USER/Pictures/$(date)"
-bindsym Ctrl+$mod+Print exec --no-startup-id maim --window $(xdotool getactivewindow) "/home/$USER/Pictures/$(date)"
-bindsym Ctrl+Shift+Print exec --no-startup-id maim --select "/home/$USER/Pictures/$(date)"
+## Screenshots
+bindsym Ctrl+Print exec grim
+bindsym Ctrl+$mod+Print exec grim -g "$(swaymsg -t get_tree | jq -j '.. | select(.type?) | select(.focused).rect | "\(.x),\(.y) \(.width)x\(.height)"')"
+bindsym Ctrl+Shift+Print exec grim -g "$(slurp)"
 
 ## Clipboard Screenshots
-bindsym Print exec --no-startup-id maim | xclip -selection clipboard -t image/png
-bindsym $mod+Print exec --no-startup-id maim --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
-bindsym Shift+Print exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
+bindsym Print exec grim - | wl-copy
+bindsym $mod+Print exec grim -g "$(swaymsg -t get_tree | jq -j '.. | select(.type?) | select(.focused).rect | "\(.x),\(.y) \(.width)x\(.height)"')" - | wl-copy
+bindsym Shift+Print exec grim -g "$(slurp)" - | wl-copy
 
 ## Media
-bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
@@ -271,9 +257,10 @@ bar {
 focus_wrapping no
 
 input "type:keyboard" {
+	xkb_options "compose:menu"
 	xkb_options caps:escape
 	repeat_delay 300
-	repeat_rate 20
+	repeat_rate 30
 }
 
 input "type:touchpad" {
@@ -285,7 +272,38 @@ input "type:touchpad" {
 
 ## aesthetics
 default_border pixel 1
-output eDP-1 scale 1
+
+output $disp1 {
+	resolution 2560x1440
+	position 0,0
+	# bg /home/main/pictures/wallpapers/jap-nasa.png fill
+	bg /home/main/pictures/wallpapers/haunter.png fill
+}
+output $disp2 {
+	resolution 1366x768
+	position 2560,400
+	scale 0.8
+	# bg /home/main/pictures/wallpapers/jap-nasa.png fill
+	bg /home/main/pictures/wallpapers/haunter.png fill
+}
+
+output $disp3 {
+	scale 1
+	bg /home/main/pictures/wallpapers/haunter.png fill
+}
+
+workspace $ws1 output $disp1
+workspace $ws2 output $disp1
+workspace $ws3 output $disp1
+workspace $ws4 output $disp1
+workspace $ws5 output $disp1
+workspace $ws6 output $disp2
+workspace $ws7 output $disp2
+workspace $ws8 output $disp2
+workspace $ws9 output $disp2
+workspace $ws10 output $disp2
+
+font pango:monospace 8
 
 set $prime #403070
 set $accnt #723ee4
@@ -296,6 +314,10 @@ client.focused 			$prime	$prime	#eeeeee $accnt	$prime
 # client.focused_inactive	$prime	$prime	#eeeeee $accnt	$prime
 
 # Launch
-exec swaybg -i /home/main/pictures/haunter.png
 exec brightnessctl -d intel_backlight set 50%
 exec brightnessctl -d :white:kbd_backlight set 0
+
+exec swaymsg 'workspace 10; exec alacritty --class cmus -e cmus'
+exec swaymsg 'workspace 10; exec keepassxc'
+exec swaymsg 'workspace 8'
+exec swaymsg 'workspace 1'
