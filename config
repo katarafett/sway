@@ -54,7 +54,7 @@ bindsym $mod+Shift+a exec discord
 bindsym $mod+Shift+e exec alacritty
 bindsym $mod+Shift+o exec firefox
 bindsym $mod+Shift+u exec signal-desktop
-bindsym $mod+Shift+d exec alacritty -e cmus
+bindsym $mod+Shift+d exec alacritty --working-directory=audio/lib -e cmus
 
 ## Screenshots
 bindsym Ctrl+Print exec grim
@@ -148,16 +148,13 @@ bindsym $mod+z scratchpad show
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id swayidle -w \
-		 timeout 300 'swaylock -f -c 000000 --ring-color 454545 --key-hl-color 723ee4' \
-         timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-		 timeout 10 'if pgrep swaylock; then swaymsg "output * power off"; fi' resume 'swaymsg "output * power on"' \
-         lock 'swaylock -f -c 000000 --ring-color 454545 --key-hl-color 723ee4'
+
+exec sh $HOME/.config/sway/lock.sh
 
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-exec --no-startup-id nm-applet
+# exec --no-startup-id nm-applet
 
 default_dim_inactive 0.2
 
@@ -319,7 +316,7 @@ client.focused 			$prime	$prime	#eeeeee $accnt	$prime
 exec brightnessctl -d intel_backlight set 50%
 exec brightnessctl -d :white:kbd_backlight set 0
 
-exec swaymsg 'workspace 10; exec alacritty --class cmus -e cmus'
+exec swaymsg 'workspace 10; exec alacritty --working-directory=audio/lib --class cmus -e cmus'
 exec swaymsg 'workspace 10; exec keepassxc'
 exec swaymsg 'workspace 8'
 exec swaymsg 'workspace 1'
