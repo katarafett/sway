@@ -226,41 +226,37 @@ bindsym $mod+Shift+$alt_10 move container to workspace number $ws10
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
+	bindsym $left resize shrink width 10 px or 10 ppt
+	bindsym $down resize grow height 10 px or 10 ppt
+	bindsym $up resize shrink height 10 px or 10 ppt
+	bindsym $right resize grow width 10 px or 10 ppt
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym $left resize shrink width 10 px or 10 ppt
-        bindsym $down resize grow height 10 px or 10 ppt
-        bindsym $up resize shrink height 10 px or 10 ppt
-        bindsym $right resize grow width 10 px or 10 ppt
+	bindsym $alt_left resize shrink width 10 px or 10 ppt
+	bindsym $alt_down resize grow height 10 px or 10 ppt
+	bindsym $alt_up resize shrink height 10 px or 10 ppt
+	bindsym $alt_right resize grow width 10 px or 10 ppt
 
-        bindsym $alt_left resize shrink width 10 px or 10 ppt
-        bindsym $alt_down resize grow height 10 px or 10 ppt
-        bindsym $alt_up resize shrink height 10 px or 10 ppt
-        bindsym $alt_right resize grow width 10 px or 10 ppt
-
-        # back to normal: Enter or Escape or $mod+r
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $mod+w mode "default"
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+	bindsym $mod+w mode "default"
 }
 
 bar {
-        status_command i3status
+	status_command i3status
 }
 
 # General conf
 focus_wrapping no
 
 input "type:keyboard" {
-	xkb_options "compose:menu"
+	xkb_options compose:menu
 	xkb_options caps:escape
 	repeat_delay 300
 	repeat_rate 30
 }
+
+# I have no idea why this works but the above doesn't
+exec swaymsg "input type:keyboard xkb_options compose:menu"
 
 input "type:touchpad" {
 	natural_scroll disabled
@@ -271,6 +267,8 @@ input "type:touchpad" {
 
 ## aesthetics
 default_border pixel 1
+
+seat seat0 xcursor_theme Vimix-cursors 24
 
 output $disp1 {
 	resolution 2560x1440
