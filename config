@@ -317,7 +317,7 @@ client.focused 			$prime	$prime	#eeeeee $accnt	$prime
 exec brightnessctl -d intel_backlight set 50%
 exec brightnessctl -d :white:kbd_backlight set 0
 
-exec swaymsg 'workspace 10; exec foot --working-directory=audio/lib --class cmus -e cmus'
+exec swaymsg 'workspace 10; exec foot --working-directory=audio/lib cmus'
 exec swaymsg 'workspace 10; exec keepassxc'
 exec swaymsg 'workspace 8'
 exec swaymsg 'workspace 1'
