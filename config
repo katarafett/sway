@@ -51,10 +51,10 @@ bindsym $mod+e exec tofi-drun | xargs swaymsg exec --
 
 bindsym $mod+Shift+minus exec systemctl poweroff
 bindsym $mod+Shift+a exec discord
-bindsym $mod+Shift+e exec alacritty
+bindsym $mod+Shift+e exec foot
 bindsym $mod+Shift+o exec firefox
 bindsym $mod+Shift+u exec signal-desktop
-bindsym $mod+Shift+d exec alacritty --working-directory=audio/lib -e cmus
+bindsym $mod+Shift+d exec foot --working-directory=audio/lib -e cmus
 
 ## Screenshots
 bindsym Ctrl+Print exec grim
@@ -314,7 +314,7 @@ client.focused 			$prime	$prime	#eeeeee $accnt	$prime
 exec brightnessctl -d intel_backlight set 50%
 exec brightnessctl -d :white:kbd_backlight set 0
 
-exec swaymsg 'workspace 10; exec alacritty --working-directory=audio/lib --class cmus -e cmus'
+exec swaymsg 'workspace 10; exec foot --working-directory=audio/lib --class cmus -e cmus'
 exec swaymsg 'workspace 10; exec keepassxc'
 exec swaymsg 'workspace 8'
 exec swaymsg 'workspace 1'
