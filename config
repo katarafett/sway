@@ -248,7 +248,7 @@ bar {
 # General conf
 focus_wrapping no
 
-input "type:keyboard" {
+input "type:*" {
 	xkb_options compose:menu
 	xkb_options caps:escape
 	repeat_delay 300
@@ -257,6 +257,9 @@ input "type:keyboard" {
 
 # I have no idea why this works but the above doesn't
 exec swaymsg "input type:keyboard xkb_options compose:menu"
+exec swaymsg "input type:keyboard xkb_options caps:escape"
+exec swaymsg "input type:keyboard repeat_delay 300"
+exec swaymsg "input type:keyboard repeat_rate 30"
 
 input "type:touchpad" {
 	natural_scroll disabled
