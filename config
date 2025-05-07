@@ -140,30 +140,9 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+Shift+z move scratchpad
 bindsym $mod+z scratchpad show
 
-
-
-
-# The combination of xss-lock, nm-applet and pactl is a popular choice, so
-# they are included here as an example. Modify as you see fit.
-
-# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
-# screen before suspend. Use loginctl lock-session to lock your screen.
-
 exec sh $HOME/.config/sway/lock.sh
 
-
-# NetworkManager is the most popular way to manage wireless networks on Linux,
-# and nm-applet is a desktop environment-independent system tray GUI for it.
-# exec --no-startup-id nm-applet
-
 default_dim_inactive 0.2
-
-
-# focus the parent container
-# bindcode $mod+38 focus parent
-
-# focus the child container
-#bindsym $mod+d focus child
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -243,23 +222,18 @@ mode "resize" {
 
 bar {
 	status_command i3status
+	# mode dock
+	mode hide
 }
 
 # General conf
 focus_wrapping no
 
-input "type:*" {
-	xkb_options compose:menu
-	xkb_options caps:escape
+input "type:keyboard" {
+	xkb_options compose:menu,caps:escape
 	repeat_delay 300
 	repeat_rate 30
 }
-
-# I have no idea why this works but the above doesn't
-exec swaymsg "input type:keyboard xkb_options compose:menu"
-exec swaymsg "input type:keyboard xkb_options caps:escape"
-exec swaymsg "input type:keyboard repeat_delay 300"
-exec swaymsg "input type:keyboard repeat_rate 30"
 
 input "type:touchpad" {
 	natural_scroll disabled
@@ -270,26 +244,28 @@ input "type:touchpad" {
 
 ## aesthetics
 default_border pixel 1
+default_floating_border pixel 1
+titlebar_border_thickness 0
 
 seat seat0 xcursor_theme Vimix-cursors 24
 
 output $disp1 {
 	resolution 2560x1440
-	position 0,0
-	# bg /home/main/pictures/wallpapers/jap-nasa.png fill
-	bg /home/main/pictures/wallpapers/haunter.png fill
+	position 1707,0
 }
 output $disp2 {
 	resolution 1366x768
-	position 2560,400
+	position 0,0
 	scale 0.8
-	# bg /home/main/pictures/wallpapers/jap-nasa.png fill
-	bg /home/main/pictures/wallpapers/haunter.png fill
 }
 
 output $disp3 {
 	scale 1
-	bg /home/main/pictures/wallpapers/haunter.png fill
+}
+
+output * {
+	bg /home/main/pictures/wallpapers/man-in-space.png fill
+	# bg "#000000" solid_color
 }
 
 workspace $ws1 output $disp1
